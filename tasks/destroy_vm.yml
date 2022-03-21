@@ -1,0 +1,17 @@
+---
+  - name: "Destroy VM if state absent VM: {{ outer_item.vm_name }} with VM ID: {{ outer_item.vm_vmid }}"
+    community.general.proxmox_kvm:
+      node: "{{ outer_item.vm_node | default(vm_node) }}"
+      api_token_id: "{{ outer_item.vm_api_token_id | default(vm_api_token_id)}}"
+      api_password: "{{ outer_item.vm_api_token_secret | default(vm_api_token_secret) }}"
+      api_token_secret: "{{ outer_item.vm_api_token_secret | default(vm_api_token_secret) }}"
+      api_host: "{{ outer_item.vm_api_host | default(vm_api_host) }}"
+      api_user: "{{ outer_item.vm_api_user | default(vm_api_user) }}"
+      name: "{{ outer_item.vm_name }}"
+      vmid: "{{ outer_item.vm_vmid }}"
+      update: yes
+      force: yes
+      skiplock: yes
+      state: 'absent'
+    when: outer_item.vm_state == 'absent'
+    become: true

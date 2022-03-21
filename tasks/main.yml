@@ -1,0 +1,13 @@
+---
+  - name: include stop_vm.yml task
+    include_tasks: stop_vm.yml
+    with_items: "{{ vms }}"
+    loop_control:
+      loop_var: outer_item
+
+  - name: include destroy_vm.yml task
+    include_tasks: destroy_vm.yml
+    with_items: "{{ vms }}"
+    loop_control:
+      loop_var: outer_item
+

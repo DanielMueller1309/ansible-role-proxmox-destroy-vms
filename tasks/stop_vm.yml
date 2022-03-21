@@ -1,0 +1,25 @@
+---
+
+  - name: "Get VM current state of VM: {{ outer_item.vm_name }} with VM ID: {{ outer_item.vm_vmid }}"
+    stat:
+      path: "/etc/pve/qemu-server/{{outer_item.vm_vmid}}.conf"
+    register: vm_status
+
+
+  - name: "show vm_status of VM: {{ outer_item.vm_name }} with VM ID: {{ outer_item.vm_vmid }}"
+    debug:
+      msg: "{{ vm_status }}"
+
+  - name: "Stop VM: {{ outer_item.vm_name }} with VM ID: {{ outer_item.vm_vmid }}"
+    community.general.proxmox_kvm:
+      api_token_id: "{{ vm_api_token_id }}"
+      api_password: "{{ vm_api_token_secret }}"
+      api_token_secret: "{{ vm_api_token_secret }}"
+      api_host: "{{ vm_api_host }}"
+      api_user: "{{vm_api_user}}"
+      name: "{{ outer_item.vm_name }}"
+      node: "{{ vm_node }}"
+      state: stopped
+    become: true
+    when: outer_item.vm_state == 'absent' and vm_status.stat.exists
+
