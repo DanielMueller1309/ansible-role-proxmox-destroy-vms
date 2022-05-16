@@ -12,6 +12,7 @@
       update: yes
       force: yes
       skiplock: yes
+      timeout: 300
       state: 'absent'
     when: outer_item.vm_state == 'absent'
     become: true
